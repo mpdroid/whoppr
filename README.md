@@ -29,7 +29,7 @@ $ ./gradlew clean build
 
 - To view the application code in its monolithic state:
 ```
-$ git checkout strawman
+$ git checkout 1-strawman
 ```
 - Verify with:
 ```
