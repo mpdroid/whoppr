@@ -35,9 +35,8 @@ $ git checkout 1-strawman
 ```
 $ ./gradlew clean build
 
-$ ./gradlew monolith:bootRun
+$ ./gradlew monolith:bootRun # In another terminal window
 
-# In another terminal window
 $ ./gradlew monolith:cucumber -PenableCucumber 
 ```
 
