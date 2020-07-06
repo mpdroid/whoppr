@@ -29,7 +29,7 @@ $ ./gradlew clean build
 
 - To view the application code in its monolithic state:
 ```
-$ git checkout strawman
+$ git checkout 1-strawman
 ```
 - Verify with:
 ```
@@ -50,7 +50,7 @@ $ ./gradlew monolith:cucumber -PenableCucumber
 
 - To view the foundational elements added to the workspace before refactoring:
 ```
-$ git checkout foundations
+$ git checkout 2-foundations
 ```
 - Verify with:
 ```
