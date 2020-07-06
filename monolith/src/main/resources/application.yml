@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: whoppr # serviceId in registry
   security:
     user:
       name: joshua
@@ -11,7 +13,22 @@ logging:
     org.springframework.*: ERROR
     org.springframework.data.mongodb.core.MongoTemplate: ERROR
 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://joshua:joshua@localhost:8761/eureka/
+
 # needed for file uploads
 spring.servlet.multipart:
     enabled: true
     location: ${java.io.tmpdir}
+
+zuul:
+  # Authorization removed to allow auth headers to pass thru
+  sensitiveHeaders: Cookie,Set-Cookie #, Authorization
+  # routes:
+    # billing:
+    #  path: /compute-bill/**       # controller end-point
+    #  serviceId: billing      # spring application name
+    #  stripPrefix: false      # carry along the base path
+

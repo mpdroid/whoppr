@@ -1,4 +1,5 @@
 dependencies {
+  implementation "${cloudGrp}:${cloudPrefix}-starter-netflix-zuul"
 	implementation project(':common')
 	testImplementation project(':common')
 	testImplementation project(':test-utils')

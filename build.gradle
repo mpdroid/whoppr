@@ -5,9 +5,17 @@ buildscript {
 		springBootVersion = '2.3.1.RELEASE'
     bootGrp = 'org.springframework.boot'
     bootPrefix = 'spring-boot'
+
+		springCloudVersion = 'Hoxton.SR1'
+    cloudGrp = 'org.springframework.cloud'
+    cloudPrefix = 'spring-cloud'
+
+    // for spring cloud contracts
+    verifierVersion = '2.2.3.RELEASE'
 	}
 	repositories {
 		gradlePluginPortal()
+		mavenCentral()
 	}
 	dependencies {
 		classpath("io.spring.gradle:dependency-management-plugin:1.0.9.RELEASE")
@@ -16,25 +24,31 @@ buildscript {
 
 plugins {
   id 'org.springframework.boot' version '2.2.2.RELEASE'  apply false
+  id "org.springframework.cloud.contract" version "${verifierVersion}" apply false
+  id "maven-publish"
 }
 
 ext {
   subProjectName = ''
   libraries = ['common', 'test-utils']
-  bootables = ['monolith']
-  microservices = bootables
-  secured = microservices
+  microservices = ['monolith']
+  bootables = microservices + 'registry'
+  secured = microservices + 'registry'
 }
 // set build configurations common to all sub-projects
 subprojects {
   subProjectName = it.name
 	apply plugin: 'java'
 	apply plugin: 'io.spring.dependency-management'
+  apply plugin: 'maven-publish'
   if ( libraries.contains(subProjectName) ) {
     apply plugin: 'java-library'
   }
 	if ( bootables.contains(subProjectName)  )  {
 	  apply plugin: "${bootGrp}"
+	}
+	if (microservices.contains(subProjectName) ){
+	 apply plugin: "${cloudGrp}.contract"
 	}
 
 	group = "com.whoppr"
@@ -49,6 +63,9 @@ subprojects {
 	  // set spring boot dependencies version for all sub-projects
 		imports {
 			mavenBom "${bootGrp}:${bootPrefix}-dependencies:${springBootVersion}"
+			mavenBom "${cloudGrp}:${cloudPrefix}-dependencies:" +
+			         "${springCloudVersion}"
+			mavenBom "${cloudGrp}:${cloudPrefix}-contract-dependencies:${verifierVersion}"
 		}
 	}
 
@@ -79,8 +96,19 @@ subprojects {
 	  }
 	  if (microservices.contains(subProjectName) || libraries.contains(subProjectName) )  {
 				implementation "${bootGrp}:${bootPrefix}-starter-data-mongodb"
+ 				implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+				implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+				testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
+				testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
 		}
 	}
+
+	if (microservices.contains(subProjectName)  )  {
+    contracts {
+      testFramework = 'JUNIT5'
+      failOnNoContracts = false
+    }
+   }
 
 
 	tasks.withType(JavaExec) {

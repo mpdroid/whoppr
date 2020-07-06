@@ -64,9 +64,9 @@ $ ./gradlew acceptance:cucumber -PenableCucumber
 
 - Update master build.gradle with `Spring Cloud` imports.
 - Enable Spring Cloud Contract in all sub-projects through master `build.gradle`.
-- Add gateway capabilities to `monolith` with `Spring Cloud Netflix Zuul`.
-- Create service `registry` sub-project using `Spring Cloud Netflix Eureka Server`.
-- Add `Spring Cloud Netflix Eureka Client` to `monolith` and stir well.
+- Add gateway capabilities to `monolith` with `Netflix Zuul`.
+- Create service `registry` sub-project using `Eureka Server`.
+- Add `Eureka Client` and `OpenFeign` to `monolith` and stir well.
 
 - To view the infrastructure elements added to the workspace:
 ```
