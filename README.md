@@ -2,6 +2,15 @@
 This is companion code to a [medium article](https://medium.com/p/1ac7a0803db7/edit) of the same name.
 The article is a step-by-step guide with each major step corresponding to a branch in this repo.
 
+WHOPPR is a fictional pizza ordering sytem composed of various services all smushed up in one monolothical application.
+The following Spring Cloud services are then used to break it down into micro-services.
+- Spring Cloud Netflix (Zuul and Eureka)
+- Spring Cloud Feign
+- Spring Cloud Contracts
+- Sprint Cloud Stream and
+- Spring Cloud Security
+
+
 ## Pre-requisites
 - jdk 8
 - gradle 6+
