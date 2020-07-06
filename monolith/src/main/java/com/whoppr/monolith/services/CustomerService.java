@@ -1,10 +1,10 @@
 package com.whoppr.monolith.services;
 
-import com.whoppr.monolith.exceptions.NotFoundException;
-import com.whoppr.monolith.model.Customer;
-import com.whoppr.monolith.model.Order;
-import com.whoppr.monolith.model.OrderStatus;
-import com.whoppr.monolith.model.ShoppingCart;
+import com.whoppr.common.exceptions.NotFoundException;
+import com.whoppr.common.model.Customer;
+import com.whoppr.common.model.Order;
+import com.whoppr.common.model.OrderStatus;
+import com.whoppr.common.model.ShoppingCart;
 import com.whoppr.monolith.repos.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

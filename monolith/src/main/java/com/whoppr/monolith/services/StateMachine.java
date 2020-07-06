@@ -1,12 +1,12 @@
 package com.whoppr.monolith.services;
 
-import com.whoppr.monolith.model.OrderStatus;
-import com.whoppr.monolith.model.StateTransition;
+import com.whoppr.common.model.OrderStatus;
+import com.whoppr.common.model.StateTransition;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.whoppr.monolith.model.OrderStatus.*;
+import static com.whoppr.common.model.OrderStatus.*;
 
 public class StateMachine {
 

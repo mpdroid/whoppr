@@ -10,6 +10,3 @@ logging:
     org.mongodb.*: ERROR
     org.springframework.*: ERROR
     org.springframework.data.mongodb.core.MongoTemplate: ERROR
-app:
-  url: http://localhost:8080/
-  # TODO find a way to inject this into cucumber tests

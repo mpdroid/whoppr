@@ -1,8 +1,8 @@
 package com.whoppr.monolith.integration;
 
+import com.whoppr.common.model.*;
 import com.whoppr.monolith.MonolithicApplication;
-import com.whoppr.monolith.TestUtils;
-import com.whoppr.monolith.model.*;
+import com.whoppr.testutils.IntegrationTestBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +14,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
+import static com.whoppr.testutils.TestDataBuddy.buildTestOrderItems;
+import static com.whoppr.testutils.TestDataBuddy.buildTestShoppingCart;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -48,8 +50,8 @@ class CustomerIntegrationTest extends IntegrationTestBase {
   }
 
   private void whenCustomerChecksOutShoppingCart() throws Exception {
-    ShoppingCart cart = TestUtils.buildTestShoppingCart(
-        TestUtils.buildTestOrderItems(testMenuItems)
+    ShoppingCart cart = buildTestShoppingCart(
+        buildTestOrderItems(testMenuItems)
     );
 
     Order actualOrder = executePost("/checkout", cart, Order.class);

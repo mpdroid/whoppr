@@ -1,10 +1,10 @@
 package com.whoppr.monolith.services;
 
-import com.whoppr.monolith.exceptions.PaymentDeclinedException;
-import com.whoppr.monolith.model.MenuItem;
-import com.whoppr.monolith.model.Order;
-import com.whoppr.monolith.model.OrderItem;
-import com.whoppr.monolith.model.ShoppingCart;
+import com.whoppr.common.exceptions.PaymentDeclinedException;
+import com.whoppr.common.model.MenuItem;
+import com.whoppr.common.model.Order;
+import com.whoppr.common.model.OrderItem;
+import com.whoppr.common.model.ShoppingCart;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.whoppr.monolith.TestUtils.*;
+import static com.whoppr.testutils.TestDataBuddy.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;

@@ -1,8 +1,8 @@
 package com.whoppr.monolith.services;
 
-import com.whoppr.monolith.exceptions.NotFoundException;
-import com.whoppr.monolith.model.MenuItem;
-import com.whoppr.monolith.model.Recipe;
+import com.whoppr.common.exceptions.NotFoundException;
+import com.whoppr.common.model.MenuItem;
+import com.whoppr.common.model.Recipe;
 import com.whoppr.monolith.repos.MenuItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

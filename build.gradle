@@ -1,0 +1,120 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+buildscript {
+	ext {
+		springBootVersion = '2.3.1.RELEASE'
+		springCloudVersion = 'Hoxton.SR1'
+	}
+	repositories {
+		gradlePluginPortal()
+	}
+	dependencies {
+		classpath("io.spring.gradle:dependency-management-plugin:1.0.9.RELEASE")
+	}
+}
+
+plugins {
+  id 'org.springframework.boot' version '2.2.2.RELEASE'  apply false
+}
+
+ext {
+ subProjectName = ''
+ libraries = ['common', 'test-utils']
+ bootables = ['monolith']
+ microservices = bootables
+ secured = microservices
+}
+// set build configurations common to all sub-projects
+subprojects {
+	subProjectName = it.name
+	apply plugin: 'java'
+	apply plugin: 'io.spring.dependency-management'
+  if ( libraries.contains(subProjectName) ) {
+    apply plugin: 'java-library'
+  }
+	if ( bootables.contains(subProjectName)  )  {
+	  apply plugin: 'org.springframework.boot'
+	}
+
+	group = "com.whoppr"
+	version = "0.0.1-SNAPSHOT"
+	sourceCompatibility = '1.8'
+
+	repositories {
+		mavenCentral()
+	}
+
+	dependencyManagement {
+	  // set spring boot dependencies version for all sub-projects
+		imports {
+			mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+			mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		}
+	}
+
+	dependencies {
+		// import common libraries required in all sub-projects
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
+		testCompileOnly 'org.projectlombok:lombok'
+		testAnnotationProcessor 'org.projectlombok:lombok'
+
+		testImplementation 'org.springframework:spring-test'
+		testImplementation('org.springframework.boot:spring-boot-starter-test') {
+			exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+		}
+    // https://www.baeldung.com/jackson-serialize-dates
+	  implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+  	testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+
+		if (bootables.contains(subProjectName) || libraries.contains(subProjectName)) {
+				implementation 'org.springframework.boot:spring-boot-starter-web'
+				implementation 'org.springframework.boot:spring-boot-starter-security'
+		}
+	  if (secured.contains(subProjectName)  || libraries.contains(subProjectName))  {
+				// implementation 'org.springframework.cloud:spring-cloud-starter-oauth2'
+				implementation 'org.springframework.security:spring-security-web'
+				testImplementation 'org.springframework.security:spring-security-web'
+				testImplementation('org.springframework.security:spring-security-test')
+	  }
+	  if (microservices.contains(subProjectName) || libraries.contains(subProjectName) )  {
+				implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+		}
+	}
+
+
+	tasks.withType(JavaExec) {
+      jvmArgs = ['-Xms64m', '-Xmx64m']
+  }
+
+	test {
+  	useJUnitPlatform()
+  }
+
+  tasks.withType(Test) {
+      testLogging {
+          events TestLogEvent.FAILED,
+                 TestLogEvent.PASSED,
+                 TestLogEvent.SKIPPED,
+                 TestLogEvent.STANDARD_OUT
+          exceptionFormat TestExceptionFormat.FULL
+          showExceptions true
+          showCauses true
+          showStackTraces true
+          debug {
+		        events TestLogEvent.STARTED,
+					    TestLogEvent.FAILED,
+					    TestLogEvent.PASSED,
+					    TestLogEvent.SKIPPED,
+					    TestLogEvent.STANDARD_ERROR,
+					    TestLogEvent.STANDARD_OUT
+		        exceptionFormat TestExceptionFormat.FULL
+          }
+          info.events = debug.events
+          info.exceptionFormat = debug.exceptionFormat
+      }
+  }
+}
+
+
+

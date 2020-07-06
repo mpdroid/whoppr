@@ -1,9 +1,9 @@
 package com.whoppr.monolith.services;
 
-import com.whoppr.monolith.exceptions.PaymentDeclinedException;
-import com.whoppr.monolith.model.Address;
-import com.whoppr.monolith.model.Order;
-import com.whoppr.monolith.model.ShoppingCart;
+import com.whoppr.common.exceptions.PaymentDeclinedException;
+import com.whoppr.common.model.Address;
+import com.whoppr.common.model.Order;
+import com.whoppr.common.model.ShoppingCart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;

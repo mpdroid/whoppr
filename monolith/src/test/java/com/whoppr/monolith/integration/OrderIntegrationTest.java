@@ -1,10 +1,11 @@
 package com.whoppr.monolith.integration;
 
+import com.whoppr.common.model.Customer;
+import com.whoppr.common.model.MenuItem;
+import com.whoppr.common.model.Order;
+import com.whoppr.common.model.OrderStatus;
 import com.whoppr.monolith.MonolithicApplication;
-import com.whoppr.monolith.model.Customer;
-import com.whoppr.monolith.model.MenuItem;
-import com.whoppr.monolith.model.Order;
-import com.whoppr.monolith.model.OrderStatus;
+import com.whoppr.testutils.IntegrationTestBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +20,7 @@ import java.nio.file.Files;
 import java.util.Base64;
 import java.util.List;
 
-import static com.whoppr.monolith.TestUtils.buildTestReceipt;
+import static com.whoppr.testutils.TestDataBuddy.buildTestReceipt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)

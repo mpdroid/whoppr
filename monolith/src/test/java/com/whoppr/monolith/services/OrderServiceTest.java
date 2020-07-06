@@ -1,6 +1,6 @@
 package com.whoppr.monolith.services;
 
-import com.whoppr.monolith.model.*;
+import com.whoppr.common.model.*;
 import com.whoppr.monolith.repos.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
-import static com.whoppr.monolith.TestUtils.*;
+import static com.whoppr.testutils.TestDataBuddy.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;

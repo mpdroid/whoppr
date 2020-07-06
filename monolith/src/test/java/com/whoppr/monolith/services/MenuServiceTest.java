@@ -1,6 +1,6 @@
 package com.whoppr.monolith.services;
 
-import com.whoppr.monolith.model.MenuItem;
+import com.whoppr.common.model.MenuItem;
 import com.whoppr.monolith.repos.MenuItemRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,7 @@ import org.mockito.Mock;
 
 import java.util.List;
 
-import static com.whoppr.monolith.TestUtils.buildTestMenuItems;
+import static com.whoppr.testutils.TestDataBuddy.buildTestMenuItems;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;

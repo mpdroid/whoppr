@@ -1,0 +1,32 @@
+dependencies {
+	testImplementation 'info.cukes:cucumber-java:1.2.5'
+	testImplementation 'info.cukes:cucumber-jvm:1.2.5'
+	testImplementation 'info.cukes:cucumber-junit:1.2.5'
+	testImplementation 'info.cukes:cucumber-spring:1.2.5'
+	testImplementation 'org.springframework:spring-web'
+	testImplementation project(':common')
+	testImplementation project(':test-utils')
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+task cucumber(type: Test) {
+    testLogging.showStandardStreams = true
+    systemProperties System.getProperties()
+}
+
+jar {
+  enabled = false
+}
+
+cucumber.onlyIf {
+    project.hasProperty('enableCucumber')
+}
+
+test.onlyIf {
+    project.hasProperty('enableCucumber')
+}

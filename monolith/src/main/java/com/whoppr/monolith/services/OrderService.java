@@ -1,11 +1,11 @@
 package com.whoppr.monolith.services;
 
-import com.whoppr.monolith.exceptions.NoPendingOrders;
-import com.whoppr.monolith.exceptions.NotFoundException;
-import com.whoppr.monolith.model.KanBan;
-import com.whoppr.monolith.model.Order;
-import com.whoppr.monolith.model.OrderStatus;
-import com.whoppr.monolith.model.StateTransition;
+import com.whoppr.common.exceptions.NoPendingOrders;
+import com.whoppr.common.exceptions.NotFoundException;
+import com.whoppr.common.model.KanBan;
+import com.whoppr.common.model.Order;
+import com.whoppr.common.model.OrderStatus;
+import com.whoppr.common.model.StateTransition;
 import com.whoppr.monolith.repos.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

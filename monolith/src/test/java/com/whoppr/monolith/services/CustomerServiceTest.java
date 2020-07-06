@@ -1,7 +1,6 @@
 package com.whoppr.monolith.services;
 
-import com.whoppr.monolith.TestUtils;
-import com.whoppr.monolith.model.*;
+import com.whoppr.common.model.*;
 import com.whoppr.monolith.repos.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,7 @@ import org.mockito.Mock;
 import java.util.List;
 import java.util.Optional;
 
-import static com.whoppr.monolith.TestUtils.*;
+import static com.whoppr.testutils.TestDataBuddy.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -67,7 +66,7 @@ class CustomerServiceTest {
         eq(testCustomer.getCustomerToken()),
         any()
     )).thenReturn("mock-hold-id");
-    Order order = TestUtils.buildTestOrder(testCustomer);
+    Order order = buildTestOrder(testCustomer);
 
     ArgumentCaptor<Order> orderArgumentCaptor = ArgumentCaptor.forClass(Order.class);
     customerService.confirmOrder(order);

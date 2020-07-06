@@ -38,5 +38,25 @@ $ ./gradlew clean build
 $ ./gradlew monolith:cucumber -PenableCucumber 
 ```
 
+## Step 1 : Foundations
+
+- Create master build.gradle with common tasks and imports
+- Move data model, configuration and exception classes to 'common' library sub-project
+- Move test helpers to 'test-utils' library sub-project
+- Move acceptance tests from monolith into 'acceptance' sub-project
+
+- To view the foundational elements added to the workspace before refactoring:
+```
+$ git checkout foundations
+```
+- Verify with:
+```
+$ ./gradlew clean build
+
+$ ./gradlew monolith:bootRun
+
+# In another terminal window
+$ ./gradlew acceptance:cucumber -PenableCucumber 
+```
 
 
