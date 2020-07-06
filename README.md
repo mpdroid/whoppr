@@ -41,7 +41,7 @@ $ ./gradlew monolith:bootRun
 $ ./gradlew monolith:cucumber -PenableCucumber 
 ```
 
-## Step 1 : Foundations
+## Step 2 : Foundations
 
 - Create master build.gradle with common tasks and imports
 - Move data model, configuration and exception classes to 'common' library sub-project
