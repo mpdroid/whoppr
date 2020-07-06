@@ -62,4 +62,26 @@ $ ./gradlew monolith:bootRun
 $ ./gradlew acceptance:cucumber -PenableCucumber 
 ```
 
+## Step 3 : Micro-services infrastructure
 
+- Update master build.gradle with `Spring Cloud` imports.
+- Enable Spring Cloud Contract in all sub-projects through master `build.gradle`.
+- Add gateway capabilities to `monolith` with `Spring Cloud Netflix Zuul`.
+- Create service `registry` sub-project using `Spring Cloud Netflix Eureka Server`.
+- Add `Spring Cloud Netflix Eureka Client` to `monolith` and stir well.
+
+- To view the infrastructure elements added to the workspace:
+```
+$ git checkout 3-eureka
+```
+- Verify with:
+```
+$ ./gradlew clean build
+
+$ ./gradlew registry:bootRun # separate terminal
+
+$ ./gradlew monolith:bootRun # separate terminal
+
+$ ./gradlew acceptance:cucumber -PenableCucumber 
+```
+- Connect to http://localhost:8761 with configured credentials to verify that `whoppr` service (name of our monolith) is visible in the registry. 
