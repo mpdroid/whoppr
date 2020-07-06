@@ -1,9 +1,9 @@
 dependencies {
 	implementation project(':common')
 	implementation 'org.springframework:spring-test'
-	implementation('org.springframework.boot:spring-boot-starter-test') {
+	implementation("${bootGrp}:${bootPrefix}-starter-test") {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation "${bootGrp}:${bootPrefix}-starter-security"
 	implementation('org.springframework.security:spring-security-test')
 }
