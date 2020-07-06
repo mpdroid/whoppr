@@ -1,0 +1,17 @@
+spring:
+  security:
+    user:
+      name: joshua
+      password: joshua
+
+logging:
+  level:
+    com.whoppr.*: ERROR
+    org.mongodb.*: ERROR
+    org.springframework.*: ERROR
+    org.springframework.data.mongodb.core.MongoTemplate: ERROR
+
+# needed for file uploads
+spring.servlet.multipart:
+    enabled: true
+    location: ${java.io.tmpdir}
