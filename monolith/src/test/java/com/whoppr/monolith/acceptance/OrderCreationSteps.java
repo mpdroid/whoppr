@@ -82,7 +82,7 @@ public class OrderCreationSteps extends StepExecutionBase {
   public void paymentIsProcessed() throws Exception {
     Order testOrder = testContext().get("customerOrder");
     Order actualCustomerOrder = executeGet("order/" + testOrder.getId(), Order.class);
-    assertNotNull(true, actualCustomerOrder.getHoldId());
+    assertNotNull(actualCustomerOrder.getHoldId());
   }
 
   @Then(".*order is sent to the kitchen$")
