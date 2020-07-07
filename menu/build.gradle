@@ -9,9 +9,4 @@ contracts {
 	failOnNoContracts = true
 }
 test.finalizedBy(publishToMavenLocal)
-//  {
-//   doLast {
-//      print 'should publish to maven local'
-//      publishToMavenLocal
-//   }
-// }
+
