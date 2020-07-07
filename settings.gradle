@@ -1,5 +1,6 @@
 rootProject.name = 'whoppr'
 include 'monolith'
+include 'menu'
 include 'common'
 include 'test-utils'
 include 'acceptance'

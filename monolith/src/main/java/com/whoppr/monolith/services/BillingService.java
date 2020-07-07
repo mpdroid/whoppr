@@ -16,7 +16,7 @@ import java.util.UUID;
 public class BillingService {
 
   @Autowired
-  MenuService menuService;
+  MenuClient menuClient;
 
   public Order computeOrderTotal(ShoppingCart cart) {
     Order order = Order.builder()
@@ -44,7 +44,7 @@ public class BillingService {
   }
 
   private Double getUnitPrice(String menuItemId) {
-    return menuService
+    return menuClient
         .getMenuItem(menuItemId)
         .getUnitPrice();
   }

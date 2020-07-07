@@ -54,7 +54,6 @@ public class IntegrationTestBase {
     mapper.registerModule(new JavaTimeModule());
   }
 
-
   protected List<MenuItem> createTestMenuItems() throws Exception {
     executeDelete("/menu-items");
     List<MenuItem> menuItems = buildTestMenuItems();
@@ -136,13 +135,16 @@ public class IntegrationTestBase {
         .andExpect(status().is2xxSuccessful());
   }
 
-  private HttpHeaders createHeaders(String username, String password) {
+  public static String createAuthHeader(String username, String password) {
+    String auth = username + ":" + password;
+    byte[] encodedAuth = Base64.encodeBase64(
+        auth.getBytes(Charset.forName("US-ASCII")));
+    return "Basic " + new String(encodedAuth);
+  }
+
+  private static HttpHeaders createHeaders(String username, String password) {
     return new HttpHeaders() {{
-      String auth = username + ":" + password;
-      byte[] encodedAuth = Base64.encodeBase64(
-          auth.getBytes(Charset.forName("US-ASCII")));
-      String authHeader = "Basic " + new String(encodedAuth);
-      set("Authorization", authHeader);
+      set("Authorization", createAuthHeader(username, password));
     }};
   }
 

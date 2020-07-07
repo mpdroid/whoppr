@@ -31,7 +31,7 @@ plugins {
 ext {
   subProjectName = ''
   libraries = ['common', 'test-utils']
-  microservices = ['monolith']
+  microservices = ['monolith', 'menu']
   bootables = microservices + 'registry'
   secured = microservices + 'registry'
 }

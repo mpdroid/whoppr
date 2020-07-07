@@ -26,9 +26,13 @@ spring.servlet.multipart:
 zuul:
   # Authorization removed to allow auth headers to pass thru
   sensitiveHeaders: Cookie,Set-Cookie #, Authorization
-  # routes:
-    # billing:
-    #  path: /compute-bill/**       # controller end-point
-    #  serviceId: billing      # spring application name
-    #  stripPrefix: false      # carry along the base path
+  routes:
+    menu-item:
+     path: /menu-item/**  # controller end-point
+     serviceId: menu      # spring application name
+     stripPrefix: false   # carry along the base path
+    menu-items:
+     path: /menu-items/**
+     serviceId: menu
+     stripPrefix: false
 

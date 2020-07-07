@@ -83,3 +83,27 @@ $ ./gradlew monolith:bootRun # separate terminal
 $ ./gradlew acceptance:cucumber -PenableCucumber 
 ```
 - Connect to http://localhost:8761 with configured credentials to verify that `whoppr` service (name of our monolith) is visible in the registry. 
+
+## Step 4 : Start refactoring
+
+- Move menu service out of `monolith`
+- Write contract tests
+- Publish contract stubs to local maven repo
+- Create feign client in `monolith`
+- Rewrite consumers to consume feign client
+- Rewrite consumer integration tests to use contract stubs
+- Update Zuul routes
+- Verify with:
+```
+$ ./gradlew clean build
+
+$ ./gradlew registry:bootRun # separate terminal
+
+$ ./gradlew menu:bootRun # separate terminal
+
+$ ./gradlew monolith:bootRun # separate terminal
+
+$ ./gradlew acceptance:cucumber -PenableCucumber 
+```
+- Connect to http://localhost:8761 with configured credentials to verify that `whoppr` and `menu` services are visible in the registry. 
+

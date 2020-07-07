@@ -1,0 +1,17 @@
+dependencies {
+	implementation project(':common')
+	testImplementation project(':common')
+	testImplementation project(':test-utils')
+}
+contracts {
+	packageWithBaseClasses = 'com.whoppr.menu.contracts'
+	testFramework = 'JUNIT5'
+	failOnNoContracts = true
+}
+test.finalizedBy(publishToMavenLocal)
+//  {
+//   doLast {
+//      print 'should publish to maven local'
+//      publishToMavenLocal
+//   }
+// }

@@ -26,7 +26,7 @@ class BillingServiceTest {
   private BillingService billingService;
 
   @Mock
-  private MenuService menuService;
+  private MenuClient menuClient;
 
   List<MenuItem> menuItems = buildTestMenuItems();
   List<OrderItem> orderItems = buildTestOrderItems(menuItems);
@@ -34,7 +34,7 @@ class BillingServiceTest {
   @BeforeEach
   void setUp() {
     initMocks(this);
-    when(menuService.getMenuItem(menuItems.get(0).getId()))
+    when(menuClient.getMenuItem(menuItems.get(0).getId()))
         .thenReturn(menuItems.get(0));
   }
 

@@ -8,19 +8,23 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
+import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
-import static com.whoppr.testutils.TestDataBuddy.buildTestOrderItems;
-import static com.whoppr.testutils.TestDataBuddy.buildTestShoppingCart;
+import static com.whoppr.testutils.TestDataBuddy.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = MonolithicApplication.class)
+@AutoConfigureStubRunner(
+    ids = "com.whoppr:menu:+:stubs:8085",
+    stubsMode = StubRunnerProperties.StubsMode.LOCAL)
 class CustomerIntegrationTest extends IntegrationTestBase {
 
   List<MenuItem> testMenuItems;
@@ -38,7 +42,7 @@ class CustomerIntegrationTest extends IntegrationTestBase {
 
   @BeforeEach
   void setup() throws Exception {
-    testMenuItems = createTestMenuItems();
+    testMenuItems = buildTestMenuItems();
     testCustomer = createTestCustomer();
     testOrder = createTestOrder(testCustomer);
   }

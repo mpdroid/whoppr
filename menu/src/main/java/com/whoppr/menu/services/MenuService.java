@@ -1,9 +1,9 @@
-package com.whoppr.monolith.services;
+package com.whoppr.menu.services;
 
 import com.whoppr.common.exceptions.NotFoundException;
 import com.whoppr.common.model.MenuItem;
 import com.whoppr.common.model.Recipe;
-import com.whoppr.monolith.repos.MenuItemRepository;
+import com.whoppr.menu.repos.MenuItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
@@ -41,9 +41,7 @@ public class MenuService {
 
   @GetMapping(value = "/menu-item/{menuItemId}/recipe", produces = "application/json")
   public Recipe getRecipe(@PathVariable("menuItemId") String menuItemId) {
-    return menuItemRepository
-        .findById(menuItemId)
-        .orElseThrow(NotFoundException::new)
+    return getMenuItem(menuItemId)
         .getRecipe();
   }
 }
