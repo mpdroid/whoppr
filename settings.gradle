@@ -1,7 +1,4 @@
 rootProject.name = 'whoppr'
-include 'monolith'
-include 'menu'
-include 'common'
-include 'test-utils'
+include 'common', 'test-utils', 'menu', 'billing', 'order', 'customer', 'microfried'
 include 'acceptance'
 include 'registry'

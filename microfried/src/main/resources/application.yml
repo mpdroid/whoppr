@@ -1,0 +1,88 @@
+spring:
+  application:
+    name: whoppr # serviceId in registry
+  security:
+    user:
+      name: joshua
+      password: joshua
+
+logging:
+  level:
+    com.whoppr.*: ERROR
+    org.mongodb.*: ERROR
+    org.springframework.*: ERROR
+    org.springframework.data.mongodb.core.MongoTemplate: ERROR
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://joshua:joshua@localhost:8761/eureka/
+
+# needed for file uploads
+spring.servlet.multipart:
+    enabled: true
+    location: ${java.io.tmpdir}
+
+zuul:
+  # Authorization removed to allow auth headers to pass thru
+  sensitiveHeaders: Cookie,Set-Cookie #, Authorization
+  routes:
+    menu-item:
+     path: /menu-item/**  # controller end-point
+     serviceId: menu      # spring application name
+     stripPrefix: false   # carry along the base path
+    menu-items:
+     path: /menu-items/**
+     serviceId: menu
+     stripPrefix: false
+    compute-total:
+     path: /compute-total/**
+     serviceId: billing
+     stripPrefix: false
+    payment-hold:
+     path: /payment-hold/**
+     serviceId: billing
+     stripPrefix: false
+    payment-confirm:
+     path: /payment-confirm/**
+     serviceId: billing
+     stripPrefix: false
+    orders:
+     path: /orders/**
+     serviceId: order
+     stripPrefix: false
+    order:
+     path: /order/**
+     serviceId: order
+     stripPrefix: false
+    order-status:
+     path: /order-status/**
+     serviceId: order
+     stripPrefix: false
+    kanban:
+     path: /kanban/**
+     serviceId: order
+     stripPrefix: false
+    receipt:
+     path: /receipt/**
+     serviceId: order
+     stripPrefix: false
+    customer:
+     path: /customer/**
+     serviceId: customer
+     stripPrefix: false
+    customers:
+     path: /customers/**
+     serviceId: customer
+     stripPrefix: false
+    checkout:
+     path: /checkout/**
+     serviceId: customer
+     stripPrefix: false
+    orderConfirm:
+     path: /confirm-order/**
+     serviceId: customer
+     stripPrefix: false
+
+
+
