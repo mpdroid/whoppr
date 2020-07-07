@@ -31,7 +31,7 @@ plugins {
 ext {
   subProjectName = ''
   libraries = ['common', 'test-utils']
-  microservices = ['monolith', 'menu']
+  microservices = ['microfried', 'menu', 'billing', 'order', 'customer']
   bootables = microservices + 'registry'
   secured = microservices + 'registry'
 }
@@ -117,7 +117,11 @@ subprojects {
 
 	test {
   	useJUnitPlatform()
+  	finalizedBy(publishToMavenLocal) // to publish contract stubs to ~/.m2
   }
+
+
+
 
   tasks.withType(Test) {
       testLogging {

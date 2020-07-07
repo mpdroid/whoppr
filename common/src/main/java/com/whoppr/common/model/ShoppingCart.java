@@ -16,7 +16,6 @@ public class ShoppingCart {
   @Id
   private String id;
   private String customerId;
-  private ShoppingCart shoppingCart;
   private List<OrderItem> cartItems;
   private Address deliveryAddress;
   @Builder.Default

@@ -75,7 +75,7 @@ public class OrderCreationSteps extends com.whoppr.acceptance.StepExecutionBase 
 
     Order testOrder = buildTestOrder(testCustomer);
     testContext().set("customerOrder", testOrder);
-    executePost("order/confirm", testOrder);
+    executePost("confirm-order", testOrder);
   }
 
   @Then("^payment is processed$")

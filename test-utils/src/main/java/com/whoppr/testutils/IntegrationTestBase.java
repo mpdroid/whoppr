@@ -3,9 +3,7 @@ package com.whoppr.testutils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.whoppr.common.model.Customer;
-import com.whoppr.common.model.MenuItem;
-import com.whoppr.common.model.Order;
+import com.whoppr.common.model.*;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.whoppr.testutils.TestDataBuddy.*;
@@ -69,6 +68,18 @@ public class IntegrationTestBase {
     return customer;
   }
 
+  protected Order createConfirmedTestOrder(Customer customer) throws Exception {
+    executeDelete("/orders");
+    Order order = buildTestOrder(customer);
+    order.getOrderEvents().add(OrderEvent.builder()
+        .status(OrderStatus.RECEIVED)
+        .eventTime(LocalDateTime.now()).build());
+    order.setHoldId("a-hold-id");
+    order.setHoldId("a-hold-id");
+    executePost("/order", order);
+    return order;
+  }
+
   protected Order createTestOrder(Customer customer) throws Exception {
     executeDelete("/orders");
     Order order = buildTestOrder(customer);
@@ -80,7 +91,7 @@ public class IntegrationTestBase {
   protected <T> T executeGet(String url, Class<T> clazz) throws Exception {
     String result = this.mockMvc.perform(MockMvcRequestBuilders.get(url)
         .headers(headers)
-        .contentType(MediaType.APPLICATION_JSON))
+        .contentType(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())
         .andReturn().getResponse().getContentAsString();
     return mapper.readValue(result, clazz);
