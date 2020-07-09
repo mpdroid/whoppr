@@ -6,8 +6,7 @@ WHOPPR is a fictional pizza ordering sytem composed of various services all smus
 The following Spring Cloud services are then used to break it down into micro-services.
 - Spring Cloud Netflix (Zuul and Eureka)
 - Spring Cloud Feign
-- Spring Cloud Contracts
-- Sprint Cloud Stream and
+- Spring Cloud Contracts and
 - Spring Cloud Security
 
 
