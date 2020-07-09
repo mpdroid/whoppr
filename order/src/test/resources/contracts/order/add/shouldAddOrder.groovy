@@ -9,7 +9,7 @@ Contract.make {
      method "POST"
      url "/order"
      headers {
-       header('Authorization', 'Basic am9zaHVhOmpvc2h1YQ==')
+       header('Authorization', 'Bearer mock-access-token')
        contentType(applicationJson())
      }
      body (

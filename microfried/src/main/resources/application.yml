@@ -1,10 +1,19 @@
 spring:
   application:
     name: whoppr # serviceId in registry
-  security:
-    user:
-      name: joshua
-      password: joshua
+  main:
+    allow-bean-definition-overriding: true
+security:
+  oauth2:
+    client:
+      accessTokenUri: http://localhost:8086/auth/realms/whoppr/protocol/openid-connect/token
+      userAuthorizationUri: http://localhost:8086/auth/realms/whoppr/protocol/openid-connect/auth
+      clientId: whoppr
+      clientSecret: whoppr-secret
+      grantType: client_credentials
+    resource:
+      userInfoUri:  http://localhost:8086/auth/realms/whoppr/protocol/openid-connect/userinfo
+      tokenInfoUri: http://localhost:8086/auth/realms/whoppr/protocol/openid-connect/token/introspect
 
 logging:
   level:

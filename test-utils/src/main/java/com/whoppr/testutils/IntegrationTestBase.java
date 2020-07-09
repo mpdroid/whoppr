@@ -7,9 +7,11 @@ import com.whoppr.common.model.*;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.web.FilterChainProxy;
+import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
+import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -23,34 +25,37 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.whoppr.testutils.TestDataBuddy.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.client.ExpectedCount.manyTimes;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 
 public class IntegrationTestBase {
   protected WebApplicationContext webApplicationContext;
-  protected FilterChainProxy springSecurityFilter;
   protected MockMvc mockMvc;
 
-  protected RestTemplate restTemplate;
+  protected RestTemplate oauthRestTemplate;
   protected HttpHeaders headers;
   private ObjectMapper mapper;
 
   public IntegrationTestBase(
       WebApplicationContext webApplicationContext,
-      FilterChainProxy springSecurityFilter
+      RemoteTokenServices remoteTokenServices
   ) {
     this.webApplicationContext = webApplicationContext;
-    this.springSecurityFilter = springSecurityFilter;
-    RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
-    this.restTemplate = restTemplateBuilder.basicAuthentication("joshua", "joshua").build();
 
     this.mockMvc = MockMvcBuilders
         .webAppContextSetup(this.webApplicationContext)
-        .addFilter(springSecurityFilter, "/*")
+        .apply(springSecurity())
         .build();
-    this.headers = createHeaders("joshua", "joshua");
+    this.headers = new HttpHeaders() {{
+      set("Authorization", "Bearer mock-access-token");
+    }};
     this.mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());
+    mockAuthentication(remoteTokenServices);
   }
 
   protected List<MenuItem> createTestMenuItems() throws Exception {
@@ -159,5 +164,35 @@ public class IntegrationTestBase {
     }};
   }
 
+
+  public static void mockAuthentication(RemoteTokenServices remoteTokenServices) {
+    RestTemplateBuilder authRestTemplateBuilder = new RestTemplateBuilder();
+    RestTemplate oauthRestTemplate = authRestTemplateBuilder.basicAuthentication("whoppr", "whoppr-test").build();
+    remoteTokenServices.setRestTemplate(oauthRestTemplate);
+
+    MockRestServiceServer mockRestServiceServer = MockRestServiceServer.bindTo(oauthRestTemplate).build();
+
+    mockRestServiceServer.expect(manyTimes(),
+        requestTo("http://localhost:8096/auth/realms/whoppr/protocol/openid-connect/token/introspect"))
+        .andExpect(method(HttpMethod.POST)
+        )
+        .andRespond(withSuccess("{\n" +
+            "    \"exp\": 1594279108,\n" +
+            "    \"iat\": 1594278808,\n" +
+            "    \"jti\": \"6f629bc7-2594-44ff-9548-4b0ba88e84de\",\n" +
+            "    \"iss\": \"http://localhost:8096/auth/realms/whoppr\",\n" +
+            "    \"sub\": \"22a4d9fe-194c-4c6e-841a-8a55b402459f\",\n" +
+            "    \"typ\": \"Bearer\",\n" +
+            "    \"azp\": \"whoppr\",\n" +
+            "    \"session_state\": \"69cb6e5b-e04b-4332-b1a4-b710db26fd55\",\n" +
+            "    \"preferred_username\": \"joshua\",\n" +
+            "    \"acr\": \"1\",\n" +
+            "    \"scope\": \"profile\",\n" +
+            "    \"client_id\": \"whoppr\",\n" +
+            "    \"username\": \"joshua\",\n" +
+            "    \"active\": true\n" +
+            "}", MediaType.APPLICATION_JSON));
+
+  }
 
 }

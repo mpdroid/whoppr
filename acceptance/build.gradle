@@ -4,6 +4,7 @@ dependencies {
 	testImplementation 'info.cukes:cucumber-junit:1.2.5'
 	testImplementation 'info.cukes:cucumber-spring:1.2.5'
 	testImplementation 'org.springframework:spring-web'
+	testImplementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.0'
 	testImplementation project(':common')
 	testImplementation project(':test-utils')
 }
@@ -15,7 +16,7 @@ configurations {
 }
 
 task cucumber(type: Test) {
-    testLogging.showStandardStreams = true
+    testLogging.showStandardStreams = false
     systemProperties System.getProperties()
 }
 

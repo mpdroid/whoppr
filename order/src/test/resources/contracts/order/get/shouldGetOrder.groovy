@@ -9,7 +9,7 @@ Contract.make {
      method "GET"
      url "/order/order-1"
      headers {
-       header('Authorization', 'Basic am9zaHVhOmpvc2h1YQ==')
+       header('Authorization', 'Bearer mock-access-token')
      }
   }
   response {

@@ -1,0 +1,50 @@
+// keymaker needs its own spring boot libraries that are compatible
+// with keycloak dependencies
+// Based on https://www.baeldung.com/keycloak-embedded-in-spring-boot-app
+buildscript {
+	ext {
+		springBootVersion = '2.2.6.RELEASE'
+	}
+	repositories {
+		gradlePluginPortal()
+	}
+	dependencies {
+		classpath("io.spring.gradle:dependency-management-plugin:1.0.9.RELEASE")
+	}
+}
+
+apply plugin: "java"
+apply plugin: 'io.spring.dependency-management'
+apply plugin: "org.springframework.boot"
+
+group = "com.whoppr"
+version = "0.0.1-SNAPSHOT"
+sourceCompatibility = '1.8'
+
+repositories {
+  mavenCentral()
+}
+
+dependencyManagement {
+  // set spring boot dependencies version for all sub-projects
+  imports {
+    mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+  }
+}
+
+dependencies {
+  compileOnly 'org.projectlombok:lombok'
+  annotationProcessor 'org.projectlombok:lombok'
+  testCompileOnly 'org.projectlombok:lombok'
+  testAnnotationProcessor 'org.projectlombok:lombok'
+	implementation 'com.h2database:h2:1.4.200'
+	implementation "org.springframework.boot:spring-boot-starter-web"
+	implementation "org.springframework.boot:spring-boot-starter-actuator"
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+  implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+	implementation 'org.jboss.resteasy:resteasy-jackson2-provider:3.11.2.Final'
+  compile ('org.keycloak:keycloak-dependencies-server-all:10.0.1') {
+   exclude group: 'org.slf4j', module: 'slf4j-api'
+   exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+ }
+}

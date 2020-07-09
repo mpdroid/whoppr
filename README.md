@@ -6,8 +6,7 @@ WHOPPR is a fictional pizza ordering sytem composed of various services all smus
 The following Spring Cloud services are then used to break it down into micro-services.
 - Spring Cloud Netflix (Zuul and Eureka)
 - Spring Cloud Feign
-- Spring Cloud Contracts
-- Sprint Cloud Stream and
+- Spring Cloud Contracts and
 - Spring Cloud Security
 
 
@@ -106,4 +105,44 @@ $ ./gradlew monolith:bootRun # separate terminal
 $ ./gradlew acceptance:cucumber -PenableCucumber 
 ```
 - Connect to http://localhost:8761 with configured credentials to verify that `whoppr` and `menu` services are visible in the registry. 
+
+## Step 5 : Refactoring end
+
+- Apply refactoring steps to move billing, order and customer services out of `monolith`
+- Monolith has now been `microfried'
+- Verify with:
+```
+$ ./gradlew clean build
+
+$ ./gradlew registry:bootRun # separate terminal
+
+$ ./gradlew menu:bootRun # separate terminal
+
+$ ./gradlew billing:bootRun # separate terminal
+
+$ ./gradlew order:bootRun # separate terminal
+
+$ ./gradlew customer:bootRun # separate terminal
+
+$ ./gradlew microfried:bootRun # separate terminal
+
+$ ./gradlew acceptance:cucumber -PenableCucumber 
+```
+ 
+# step 6 : Securing services
+
+- Implement a local authorization server using Keycloak
+- Remember to change Joshua's user password in Keycloak admin console
+- Import spring cloud oauth2 starter into master `build.gradle`
+- Add `EnableOAuth2Client` and `EnableResourceServer` annotations to services
+- Update `application.yml`s to with oauth2 configurations
+- Configure feign clients to pass through authorization header
+- Modify integration and contract tests to use mock authentccation tokens
+- Modify acceptance tests to obtain access token from Keycloak using client creds
+- Verify with
+```
+$ ./gradlew acceptance:cucumber -PenableCucumber 
+```
+- 
+
 
