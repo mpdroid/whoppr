@@ -5,9 +5,7 @@ import com.whoppr.common.model.*;
 import com.whoppr.order.repos.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
@@ -39,11 +37,7 @@ class OrderServiceTest {
   List<MenuItem> menuItems = buildTestMenuItems();
   List<OrderItem> orderItems = buildTestOrderItems(menuItems);
   Order testOrder = buildTestOrder(testCustomer);
-
-  ThreadLocal<KanBan> kanBanThreadLocal = new ThreadLocal<KanBan>();
-  ThreadLocal<Order> orderThreadLocal = new ThreadLocal<Order>();
-
-
+  
   @BeforeEach
   void setUp() {
     initMocks(this);
@@ -82,47 +76,47 @@ class OrderServiceTest {
   @Test
   void pullKanBan() {
     ArgumentCaptor<Order> orderArgumentCaptor = ArgumentCaptor.forClass(Order.class);
-    whenKitchenOrderInQueue();
+    Order kitchenOrder = whenKitchenOrderInQueue();
     KanBan kanBan = orderService.pullKanBan("kitchen");
-    assertEquals(orderThreadLocal.get().getId(), kanBan.getOrderId());
+    assertEquals(kitchenOrder.getId(), kanBan.getOrderId());
     verify(orderRepository).save(orderArgumentCaptor.capture());
     assertEquals(OrderStatus.PREPARING, orderArgumentCaptor.getValue().getOrderStatus());
   }
 
-  private void whenKitchenOrderInQueue() {
+  private Order whenKitchenOrderInQueue() {
     Order kitchenOrder = buildTestOrder(testCustomer);
     kitchenOrder.addOrderEvent(OrderStatus.RECEIVED);
     when(orderRepository.findAll())
         .thenReturn(Arrays.asList(kitchenOrder));
-    orderThreadLocal.set(kitchenOrder);
+    return kitchenOrder;
   }
 
   @Test
   void putKanBan() {
     ArgumentCaptor<Order> orderArgumentCaptor = ArgumentCaptor.forClass(Order.class);
-    givenKitchenOrderInQueue();
-    andKitchenOrderPulledFromQueue();
+    Order kitchenOrder = givenKitchenOrderInQueue();
+    KanBan kanban = andKitchenOrderPulledFromQueue();
+    whenKitchenOrderIsCompleted(kanban);
+    InOrder orderVerifier = Mockito.inOrder(orderRepository);
+    orderVerifier.verify(orderRepository).save(orderArgumentCaptor.capture());
+    orderVerifier.verify(orderRepository).save(orderArgumentCaptor.capture());
 
-    whenKitchenOrderIsCompleted();
-    verify(orderRepository, times(2)).save(orderArgumentCaptor.capture());
     assertEquals(OrderStatus.READY, orderArgumentCaptor
-        .getAllValues()
-        .get(1)
+        .getValue()
         .getOrderStatus());
   }
 
-  private void givenKitchenOrderInQueue() {
-    whenKitchenOrderInQueue();
+  private Order givenKitchenOrderInQueue() {
+    return whenKitchenOrderInQueue();
   }
 
-  private void andKitchenOrderPulledFromQueue() {
-    KanBan kanBan = orderService.pullKanBan("kitchen");
-    kanBanThreadLocal.set(kanBan);
+  private KanBan andKitchenOrderPulledFromQueue() {
+    return orderService.pullKanBan("kitchen");
   }
 
 
-  private void whenKitchenOrderIsCompleted() {
-    orderService.putKanBan("kitchen", kanBanThreadLocal.get());
+  private void whenKitchenOrderIsCompleted(KanBan kanban) {
+    orderService.putKanBan("kitchen", kanban);
   }
 
 
@@ -147,7 +141,10 @@ class OrderServiceTest {
         .thenReturn("mock-confirmation-id");
 
     orderService.scanCustomerReceipt(testOrder.getId(), multiPart);
-    verify(orderRepository, times(2)).save(orderArgumentCaptor.capture());
+    InOrder orderVerifier = Mockito.inOrder(orderRepository);
+    orderVerifier.verify(orderRepository).save(orderArgumentCaptor.capture());
+    orderVerifier.verify(orderRepository).save(orderArgumentCaptor.capture());
+
     assertReceiptIsSaved(orderArgumentCaptor, multiPart);
     assertOrderStatusIsUpdated(orderArgumentCaptor);
   }

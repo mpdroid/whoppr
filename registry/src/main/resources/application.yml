@@ -1,6 +1,8 @@
 spring:
   application:
     name: registry
+  main:
+    allow-bean-definition-overriding: true
   security:
     user:
       name: joshua

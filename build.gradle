@@ -32,98 +32,95 @@ ext {
   subProjectName = ''
   libraries = ['common', 'test-utils']
   microservices = ['microfried', 'menu', 'billing', 'order', 'customer']
-  bootables = microservices + 'registry'
-  secured = microservices + 'registry'
+  bootables = microservices + ['registry']
+  secured = microservices
 }
 // set build configurations common to all sub-projects
 subprojects {
   subProjectName = it.name
-	apply plugin: 'java'
-	apply plugin: 'io.spring.dependency-management'
+  apply plugin: 'java'
+  apply plugin: 'io.spring.dependency-management'
   apply plugin: 'maven-publish'
   if ( libraries.contains(subProjectName) ) {
     apply plugin: 'java-library'
   }
-	if ( bootables.contains(subProjectName)  )  {
-	  apply plugin: "${bootGrp}"
-	}
-	if (microservices.contains(subProjectName) ){
-	 apply plugin: "${cloudGrp}.contract"
-	}
+  if ( bootables.contains(subProjectName)  )  {
+    apply plugin: "${bootGrp}"
+  }
+  if (microservices.contains(subProjectName) || libraries.contains(subProjectName) ){
+    apply plugin: "${cloudGrp}.contract"
+  }
 
-	group = "com.whoppr"
-	version = "0.0.1-SNAPSHOT"
-	sourceCompatibility = '1.8'
+  group = "com.whoppr"
+  version = "0.0.1-SNAPSHOT"
+  sourceCompatibility = '1.8'
 
-	repositories {
-		mavenCentral()
-	}
+  repositories {
+    mavenCentral()
+  }
 
-	dependencyManagement {
-	  // set spring boot dependencies version for all sub-projects
-		imports {
-			mavenBom "${bootGrp}:${bootPrefix}-dependencies:${springBootVersion}"
-			mavenBom "${cloudGrp}:${cloudPrefix}-dependencies:" +
-			         "${springCloudVersion}"
-			mavenBom "${cloudGrp}:${cloudPrefix}-contract-dependencies:${verifierVersion}"
-		}
-	}
-
-	dependencies {
-		// import common libraries required in all sub-projects
-		compileOnly 'org.projectlombok:lombok'
-		annotationProcessor 'org.projectlombok:lombok'
-		testCompileOnly 'org.projectlombok:lombok'
-		testAnnotationProcessor 'org.projectlombok:lombok'
-
-		testImplementation 'org.springframework:spring-test'
-		testImplementation("${bootGrp}:${bootPrefix}-starter-test") {
-			exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-		}
-    // https://www.baeldung.com/jackson-serialize-dates
-	  implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-  	testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-
-		if (bootables.contains(subProjectName) || libraries.contains(subProjectName)) {
-				implementation "${bootGrp}:${bootPrefix}-starter-web"
-				implementation "${bootGrp}:${bootPrefix}-starter-security"
-		}
-	  if (secured.contains(subProjectName)  || libraries.contains(subProjectName))  {
-				// implementation 'org.springframework.cloud:spring-cloud-starter-oauth2'
-				implementation 'org.springframework.security:spring-security-web'
-				testImplementation 'org.springframework.security:spring-security-web'
-				testImplementation('org.springframework.security:spring-security-test')
-	  }
-	  if (microservices.contains(subProjectName) || libraries.contains(subProjectName) )  {
-				implementation "${bootGrp}:${bootPrefix}-starter-data-mongodb"
- 				implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-				implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-				testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
-				testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
-		}
-	}
-
-	if (microservices.contains(subProjectName)  )  {
-    contracts {
-      testFramework = 'JUNIT5'
-      failOnNoContracts = false
+  dependencyManagement {
+    // set spring boot dependencies version for all sub-projects
+    imports {
+      mavenBom "${bootGrp}:${bootPrefix}-dependencies:${springBootVersion}"
+      mavenBom "${cloudGrp}:${cloudPrefix}-dependencies:" +
+               "${springCloudVersion}"
+      mavenBom "${cloudGrp}:${cloudPrefix}-contract-dependencies:${verifierVersion}"
     }
-   }
+  }
+
+  dependencies {
+    // import common libraries required in all sub-projects
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework:spring-test'
+    testImplementation("${bootGrp}:${bootPrefix}-starter-test") {
+      exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    // https://www.baeldung.com/jackson-serialize-dates
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+    testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+
+    if (bootables.contains(subProjectName) || libraries.contains(subProjectName)) {
+      implementation "${bootGrp}:${bootPrefix}-starter-web"
+      implementation "${bootGrp}:${bootPrefix}-starter-security"
+    }
+    if (secured.contains(subProjectName)  || libraries.contains(subProjectName))  {
+      implementation "${cloudGrp}:spring-cloud-starter-oauth2"
+      testImplementation "${cloudGrp}:spring-cloud-starter-oauth2"
+      implementation "org.springframework.security:spring-security-web"
+      testImplementation "org.springframework.security:spring-security-web"
+      testImplementation("org.springframework.security:spring-security-test")
+    }
+    if (microservices.contains(subProjectName) || libraries.contains(subProjectName) )  {
+      implementation "${bootGrp}:${bootPrefix}-starter-data-mongodb"
+      implementation "${cloudGrp}:spring-cloud-starter-netflix-eureka-client"
+      implementation "${cloudGrp}:spring-cloud-starter-openfeign"
+      testImplementation "${cloudGrp}:spring-cloud-starter-contract-verifier"
+      testImplementation "${cloudGrp}:spring-cloud-starter-contract-stub-runner"
+    }
+
+    if (microservices.contains(subProjectName)  || libraries.contains(subProjectName))  {
+      contracts {
+        testFramework = 'JUNIT5'
+        failOnNoContracts = false
+      }
+    }
 
 
-	tasks.withType(JavaExec) {
+    tasks.withType(JavaExec) {
       jvmArgs = ['-Xms64m', '-Xmx64m']
-  }
+    }
 
-	test {
-  	useJUnitPlatform()
-  	finalizedBy(publishToMavenLocal) // to publish contract stubs to ~/.m2
-  }
+    test {
+      useJUnitPlatform()
+      finalizedBy(publishToMavenLocal) // to publish contract stubs to ~/.m2
+    }
 
-
-
-
-  tasks.withType(Test) {
+    tasks.withType(Test) {
       testLogging {
           events TestLogEvent.FAILED,
                  TestLogEvent.PASSED,
@@ -134,17 +131,18 @@ subprojects {
           showCauses true
           showStackTraces true
           debug {
-		        events TestLogEvent.STARTED,
-					    TestLogEvent.FAILED,
-					    TestLogEvent.PASSED,
-					    TestLogEvent.SKIPPED,
-					    TestLogEvent.STANDARD_ERROR,
-					    TestLogEvent.STANDARD_OUT
-		        exceptionFormat TestExceptionFormat.FULL
+            events TestLogEvent.STARTED,
+              TestLogEvent.FAILED,
+              TestLogEvent.PASSED,
+              TestLogEvent.SKIPPED,
+              TestLogEvent.STANDARD_ERROR,
+              TestLogEvent.STANDARD_OUT
+            exceptionFormat TestExceptionFormat.FULL
           }
           info.events = debug.events
           info.exceptionFormat = debug.exceptionFormat
       }
+    }
   }
 }
 

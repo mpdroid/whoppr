@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
 import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties;
-import org.springframework.security.web.FilterChainProxy;
+import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -37,9 +37,10 @@ class BillingIntegrationTest extends IntegrationTestBase {
   @Autowired
   public BillingIntegrationTest(
       WebApplicationContext webApplicationContext,
-      FilterChainProxy springSecurityFilter
+      RemoteTokenServices remoteTokenServices
   ) {
-    super(webApplicationContext, springSecurityFilter);
+    super(webApplicationContext, remoteTokenServices);
+
   }
 
   @BeforeEach
