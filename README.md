@@ -107,3 +107,27 @@ $ ./gradlew acceptance:cucumber -PenableCucumber
 ```
 - Connect to http://localhost:8761 with configured credentials to verify that `whoppr` and `menu` services are visible in the registry. 
 
+## Step 5 : Refactoring end
+
+- Apply refactoring steps to move billing, order and customer services out of `monolith`
+- Monolith has now been `microfried'
+
+- Verify with:
+```
+$ ./gradlew clean build
+
+$ ./gradlew registry:bootRun # separate terminal
+
+$ ./gradlew menu:bootRun # separate terminal
+
+$ ./gradlew billing:bootRun # separate terminal
+
+$ ./gradlew order:bootRun # separate terminal
+
+$ ./gradlew customer:bootRun # separate terminal
+
+$ ./gradlew microfried:bootRun # separate terminal
+
+$ ./gradlew acceptance:cucumber -PenableCucumber 
+```
+ 
